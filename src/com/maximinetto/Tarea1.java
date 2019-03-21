@@ -1,7 +1,10 @@
 package com.maximinetto;
 
+import com.airhacks.afterburner.injection.Injector;
 import com.maximinetto.connection.Conexion;
 import com.maximinetto.entities.Cliente;
+import com.maximinetto.view.clientemostrar.ClienteMostrarView;
+import com.maximinetto.view.tablaClientes.TablaClientesView;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -14,14 +17,20 @@ public class Tarea1 extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
         
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(getClienteMostrar());
         
         stage.setTitle("Clientes");
+        
+        
         stage.setScene(scene);
         stage.show();
     }
+    
+   private Parent getClienteMostrar(){
+       ClienteMostrarView clienteMostrarView = new ClienteMostrarView();
+       return clienteMostrarView.getView();
+   }
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
@@ -36,7 +45,7 @@ public class Tarea1 extends Application {
 
     @Override
     public void stop() throws Exception {
-        super.stop(); //To change body of generated methods, choose Tools | Templates.
+        Injector.forgetAll();
         Conexion.getInstance().getEntityManager().close();
         System.exit(0);
     }
