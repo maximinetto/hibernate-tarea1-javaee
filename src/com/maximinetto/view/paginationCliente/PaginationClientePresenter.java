@@ -5,8 +5,8 @@
  */
 package com.maximinetto.view.paginationCliente;
 
+import com.maximinetto.entities.Cliente;
 import com.maximinetto.service.ClienteCRUDService;
-import com.maximinetto.service.ClienteService;
 import com.maximinetto.view.tablaClientes.TablaClientesPresenter;
 import com.maximinetto.view.tablaClientes.TablaClientesView;
 import java.net.URL;
@@ -39,7 +39,7 @@ public class PaginationClientePresenter implements Initializable {
 
     private static final int ITEMS_PER_PAGE = 10;
      
-    private  TableView<ClienteService> tblClientes;
+    private  TableView<Cliente> tblClientes;
     private Parent tablaClientesViewParent;
     
     @Override
@@ -68,7 +68,7 @@ public class PaginationClientePresenter implements Initializable {
      
       private Node createPage(int pageIndex) {
         int fromIndex = pageIndex * ITEMS_PER_PAGE;
-        ObservableList<ClienteService> listaClientePaginada = this.clienteCRUDService.mostrarPaginado(ITEMS_PER_PAGE, fromIndex);
+        ObservableList<Cliente> listaClientePaginada = this.clienteCRUDService.mostrarPaginado(ITEMS_PER_PAGE, fromIndex);
         tblClientes.setItems(listaClientePaginada);
         double paginas = clienteCRUDService.getTotalClientes().doubleValue() / ITEMS_PER_PAGE;
         int totalPages = (int) Math.ceil(paginas);
@@ -80,7 +80,7 @@ public class PaginationClientePresenter implements Initializable {
         return ITEMS_PER_PAGE;
     }
 
-    public TableView<ClienteService> getTblClientes() {
+    public TableView<Cliente> getTblClientes() {
         return tblClientes;
     }   
     

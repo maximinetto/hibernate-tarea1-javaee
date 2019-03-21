@@ -23,37 +23,62 @@ public class ClienteCRUDService {
     
     private static Long totalClientes;
     
-    public ObservableList<ClienteService> mostrarClientes(){
+    private Cliente clienteSeleccionado;
+    
+    public ObservableList<Cliente> mostrarClientes(){
         List<Cliente> clientes = Conexion.getInstance().select("SELECT c FROM Cliente c", Cliente.class);
-        List<ClienteService> clientesService = convertToClienteService(clientes);
-        return FXCollections.observableArrayList(clientesService);
+        return FXCollections.observableArrayList(clientes);
         
     }
     
-    public ObservableList<ClienteService> mostrarPaginado(int sizePage, int fromIndex){
+    public ObservableList<Cliente> mostrarPaginado(int sizePage, int fromIndex){
         Map<List<Cliente>, Long> clientesMap = Conexion.getInstance().pageable(Cliente.class, sizePage, fromIndex);
         List<Cliente> clientes = clientesMap.keySet().stream().findFirst().get();
-        List<ClienteService> clientesService = convertToClienteService(clientes);   
         totalClientes = clientesMap.get(clientes);
-        return FXCollections.observableArrayList(clientesService);
+        return FXCollections.observableArrayList(clientes);
     }
     
     public Long getTotalClientes(){
         return totalClientes;
     }
     
-    public ObservableList<ClienteService> find(String hql,Map<String, Object> valores){
+    public ObservableList<Cliente> find(String busqueda){
+        Map<String, Object> valores = new HashMap<>();
+        String hql;
+        try{
+            hql = buscarPorDni(busqueda, valores);        
+        }
+        catch(NumberFormatException e)
+        {
+            hql = buscarPorNombreDireccionTelefono(busqueda, valores); 
+        }
         List<Cliente> clientes = Conexion.getInstance().find(hql, Cliente.class, valores);
-        List<ClienteService> clientesService = convertToClienteService(clientes);
-        return FXCollections.observableArrayList(clientesService);
+      
+        return FXCollections.observableArrayList(clientes);
     }
     
-    private List<ClienteService> convertToClienteService(List<Cliente> clientes) {
-        List<ClienteService> clientesService = clientes.stream()
-                .map(c -> {
-                    ClienteService clienteService = new ClienteService(c.getIdCliente(), c.getDni(), c.getNombre(), c.getDir(), c.getTel());
-                    return clienteService;
-                }).collect(Collectors.toList());
-        return clientesService;
+    private String buscarPorNombreDireccionTelefono(String busqueda, Map<String, Object> valores) {
+        
+        busqueda = busqueda + "%";
+        valores.put("dir", busqueda);
+        valores.put("nombre", busqueda);
+        valores.put("tel", busqueda);
+        String hql = "SELECT c FROM Cliente c WHERE UPPER(c.nombre) like UPPER(:nombre) or UPPER(c.dir) like UPPER(:dir) or UPPER(c.tel) like UPPER(:tel)";
+        return hql;
+    }
+
+    private String buscarPorDni(String busqueda, Map<String, Object> valores) throws NumberFormatException {
+        Integer.parseInt(busqueda);
+        valores.put("dni", busqueda + "%");
+        String hql = "SELECT c FROM Cliente c WHERE c.dni like :dni";
+        return hql;
+    }
+    
+    public Cliente getClienteSeleccionado(){
+        return clienteSeleccionado;
+    }
+    
+    public void setClienteSeleccionado(Cliente clienteSeleccionado){
+        this.clienteSeleccionado = clienteSeleccionado;
     }
 }

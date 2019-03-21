@@ -30,6 +30,7 @@ public class Tarea1 extends Application {
    private Parent getClienteMostrar(){
        ClienteMostrarView clienteMostrarView = new ClienteMostrarView();
        return clienteMostrarView.getView();
+        
    }
     /**
      * The main() method is ignored in correctly deployed JavaFX application.

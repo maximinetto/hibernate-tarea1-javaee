@@ -5,8 +5,8 @@
  */
 package com.maximinetto.view.clientemostrar;
 
+import com.maximinetto.entities.Cliente;
 import com.maximinetto.service.ClienteCRUDService;
-import com.maximinetto.service.ClienteService;
 import com.maximinetto.view.paginationCliente.PaginationClienteView;
 import java.net.URL;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class ClienteMostrarPresenter implements Initializable {
     @Inject
     private ClienteCRUDService clienteCRUDService;
     
-    private TableView<ClienteService> tblClientes;
+    private TableView<Cliente> tblClientes;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,34 +63,10 @@ public class ClienteMostrarPresenter implements Initializable {
         
         String busqueda = txtBuscar.getText();
         busqueda = busqueda.trim();
-        Map<String, Object> valores = new HashMap<>();
-        String hql;
-        try{
-            hql = buscarPorDni(busqueda, valores);        
-        }
-        catch(NumberFormatException e)
-        {
-            hql = buscarPorNombreDireccionTelefono(busqueda, valores); 
-        }
         
-        ObservableList<ClienteService> cliente = clienteCRUDService.find(hql, valores);
+        ObservableList<Cliente> cliente = clienteCRUDService.find(busqueda);
         tblClientes.setItems(cliente);
     }
 
-    private String buscarPorNombreDireccionTelefono(String busqueda, Map<String, Object> valores) {
-        
-        busqueda = busqueda + "%";
-        valores.put("dir", busqueda);
-        valores.put("nombre", busqueda);
-        valores.put("tel", busqueda);
-        String hql = "SELECT c FROM Cliente c WHERE UPPER(c.nombre) like UPPER(:nombre) or UPPER(c.dir) like UPPER(:dir) or UPPER(c.tel) like UPPER(:tel)";
-        return hql;
-    }
-
-    private String buscarPorDni(String busqueda, Map<String, Object> valores) throws NumberFormatException {
-        Integer.parseInt(busqueda);
-        valores.put("dni", busqueda + "%");
-        String hql = "SELECT c FROM Cliente c WHERE str(c.dni) like :dni";
-        return hql;
-    }
+    
 }

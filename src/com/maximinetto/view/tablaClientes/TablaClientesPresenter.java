@@ -5,24 +5,14 @@
  */
 package com.maximinetto.view.tablaClientes;
 
-import com.maximinetto.service.ClienteCRUDService;
-import com.maximinetto.service.ClienteService;
+import com.maximinetto.entities.Cliente;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javax.inject.Inject;
 
 /**
  *
@@ -33,22 +23,19 @@ public class TablaClientesPresenter implements Initializable {
     private ResourceBundle resources = null;
     
      @FXML
-    private TableView<ClienteService> tblClientes;
+    private TableView<Cliente> tblClientes;
 
     @FXML
-    private TableColumn<ClienteService, Integer> id;
+    private TableColumn<Cliente, Integer> dni;
 
     @FXML
-    private TableColumn<ClienteService, Integer> dni;
+    private TableColumn<Cliente, String> nombre;
 
     @FXML
-    private TableColumn<ClienteService, String> nombre;
+    private TableColumn<Cliente, String> dir;
 
     @FXML
-    private TableColumn<ClienteService, String> dir;
-
-    @FXML
-    private TableColumn<ClienteService, String> tel;
+    private TableColumn<Cliente, String> tel;
     
     
    
@@ -60,14 +47,13 @@ public class TablaClientesPresenter implements Initializable {
     }
     
     private void inicializarTabla(){
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
         dni.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         dir.setCellValueFactory(new PropertyValueFactory<>("dir"));
         tel.setCellValueFactory(new PropertyValueFactory<>("tel"));
     }
 
-    public TableView<ClienteService> getTablaCliente(){
+    public TableView<Cliente> getTablaCliente(){
         return tblClientes;
     }
 }
