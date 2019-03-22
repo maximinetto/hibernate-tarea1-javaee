@@ -7,6 +7,7 @@ package com.maximinetto.view.clientemostrar;
 
 import com.maximinetto.entities.Cliente;
 import com.maximinetto.service.ClienteCRUDService;
+import com.maximinetto.view.camposCliente.CamposClientePresenter;
 import com.maximinetto.view.camposCliente.CamposClienteView;
 import com.maximinetto.view.paginationCliente.PaginationClienteView;
 import java.net.URL;
@@ -93,6 +94,8 @@ public class ClienteMostrarPresenter implements Initializable {
     private void crearVistaFormulario(){
         Stage primaryStage = (Stage) txtBuscar.getScene().getWindow();
         CamposClienteView camposClienteView = new CamposClienteView();
+        CamposClientePresenter camposClientePresenter = camposClienteView.getRealPresenter();
+        camposClientePresenter.setSceneClienteMostrarView(primaryStage.getScene());
         Parent parent = camposClienteView.getView();
         Scene scene = new Scene(parent);
         primaryStage.setScene(scene);

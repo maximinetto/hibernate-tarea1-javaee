@@ -9,6 +9,9 @@ import com.maximinetto.entities.Cliente;
 import com.maximinetto.service.ClienteCRUDService;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -59,8 +62,9 @@ public class TablaClientesPresenter implements Initializable {
                 clienteCRUDService.setClienteSeleccionado(newSelection);
             }
         });
-        
-        clienteCRUDService.setListaClienteTabla(tblClientes.getItems());
+        Property<ObservableList<Cliente>> listCliente = clienteCRUDService
+                                                             .listaClienteTablaProperty();
+        tblClientes.itemsProperty().bindBidirectional(listCliente);
     }
 
     public TableView<Cliente> getTablaCliente(){

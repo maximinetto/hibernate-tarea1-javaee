@@ -10,6 +10,9 @@ import com.maximinetto.entities.Cliente;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +27,7 @@ public class ClienteCRUDService {
     
     private SimpleObjectProperty<Cliente> clienteSeleccionado = new SimpleObjectProperty<>();
     
-    private ObservableList<Cliente> listaClienteTabla;
+    private Property<ObservableList<Cliente>> listaClienteTabla = new SimpleListProperty<>();
     
     public ObservableList<Cliente> mostrarClientes(){
         List<Cliente> clientes = Conexion.getInstance().select("SELECT c FROM Cliente c", Cliente.class);
@@ -83,13 +86,15 @@ public class ClienteCRUDService {
         this.clienteSeleccionado.set(clienteSeleccionado);
     }
 
-    public ObservableList<Cliente> getListaClienteTabla() {
+    public Property<ObservableList<Cliente>> listaClienteTablaProperty() {
         return listaClienteTabla;
     }
-
-    public void setListaClienteTabla(ObservableList<Cliente> listaClienteTabla) {
-        this.listaClienteTabla = listaClienteTabla;
+    
+    public void setListaClienteTabla(ObservableList<Cliente> listaCliente){
+        this.listaClienteTabla.setValue(listaCliente);
     }
+
+   
     
     
 }
