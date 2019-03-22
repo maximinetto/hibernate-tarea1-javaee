@@ -6,6 +6,7 @@
 package com.maximinetto.view.tablaClientes;
 
 import com.maximinetto.entities.Cliente;
+import com.maximinetto.service.ClienteCRUDService;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javax.inject.Inject;
 
 /**
  *
@@ -37,7 +39,8 @@ public class TablaClientesPresenter implements Initializable {
     @FXML
     private TableColumn<Cliente, String> tel;
     
-    
+    @Inject
+    private ClienteCRUDService clienteCRUDService;
    
     
     @Override
@@ -51,6 +54,13 @@ public class TablaClientesPresenter implements Initializable {
         nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         dir.setCellValueFactory(new PropertyValueFactory<>("dir"));
         tel.setCellValueFactory(new PropertyValueFactory<>("tel"));
+        tblClientes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if(newSelection != null){
+                clienteCRUDService.setClienteSeleccionado(newSelection);
+            }
+        });
+        
+        clienteCRUDService.setListaClienteTabla(tblClientes.getItems());
     }
 
     public TableView<Cliente> getTablaCliente(){

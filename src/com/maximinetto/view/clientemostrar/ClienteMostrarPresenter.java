@@ -7,17 +7,22 @@ package com.maximinetto.view.clientemostrar;
 
 import com.maximinetto.entities.Cliente;
 import com.maximinetto.service.ClienteCRUDService;
+import com.maximinetto.view.camposCliente.CamposClienteView;
 import com.maximinetto.view.paginationCliente.PaginationClienteView;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javax.inject.Inject;
 
 /**
@@ -51,6 +56,7 @@ public class ClienteMostrarPresenter implements Initializable {
         
         tblClientes = paginationClienteView.getRealPresenter().getTblClientes();
         eventoBuscar();
+
     }
     
     private void eventoBuscar() {
@@ -67,6 +73,29 @@ public class ClienteMostrarPresenter implements Initializable {
         ObservableList<Cliente> cliente = clienteCRUDService.find(busqueda);
         tblClientes.setItems(cliente);
     }
-
     
+    @FXML
+    void editarRegistro(ActionEvent event) {
+        crearVistaFormulario();
+    }
+
+    @FXML
+    void eliminarRegistro(ActionEvent event) {
+
+    }
+
+    @FXML
+    void nuevoRegistro(ActionEvent event) {
+        crearVistaFormulario();
+        clienteCRUDService.setClienteSeleccionado(null);
+    }
+
+    private void crearVistaFormulario(){
+        Stage primaryStage = (Stage) txtBuscar.getScene().getWindow();
+        CamposClienteView camposClienteView = new CamposClienteView();
+        Parent parent = camposClienteView.getView();
+        Scene scene = new Scene(parent);
+        primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
+    }
 }
