@@ -8,6 +8,7 @@ package com.maximinetto.view.camposCliente;
 import com.maximinetto.connection.Conexion;
 import com.maximinetto.service.ClienteCRUDService;
 import com.maximinetto.entities.Cliente;
+import com.maximinetto.view.clientemostrar.ClienteMostrarView;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -16,10 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javax.inject.Inject;
 
 /**
@@ -28,7 +32,7 @@ import javax.inject.Inject;
  */
 public class CamposClientePresenter implements Initializable {
 
-     @FXML
+    @FXML
     private GridPane gridCampos;
 
     @FXML
@@ -55,6 +59,7 @@ public class CamposClientePresenter implements Initializable {
     private String tel;
     
     private Cliente cliente;
+    private Scene sceneClienteMostrarView;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -76,20 +81,24 @@ public class CamposClientePresenter implements Initializable {
      @FXML
     void guardar(ActionEvent event) {
         if(esValidoFormulario()){
-            
+            guardarCambios();
         }
         else{
             mensajeError();
         }
     }
     
+    public void setSceneClienteMostrarView(Scene scene){
+        this.sceneClienteMostrarView = scene;
+    }
+    
     private boolean esValidoFormulario(){
-        String dni = txtDNI.getText();
-        String tel = txtTel.getText();
+        String dniPrueba = txtDNI.getText();
+        String telPrueba = txtTel.getText();
         
         try{
-            Long.parseLong(dni);
-            Long.parseLong(tel);
+            Long.parseLong(dniPrueba);
+            Long.parseLong(telPrueba);
         }
         catch(NumberFormatException e)
         {
@@ -101,7 +110,9 @@ public class CamposClientePresenter implements Initializable {
 
     @FXML
     void volver(ActionEvent event) {
-
+        Stage primaryStage = (Stage) txtDNI.getScene().getWindow();
+        primaryStage.setScene(sceneClienteMostrarView);
+        primaryStage.centerOnScreen();
     }
     
     private void mensajeError(){
@@ -128,17 +139,20 @@ public class CamposClientePresenter implements Initializable {
         cliente = new Cliente();
         setCliente(cliente);
         Conexion.getInstance().persist(cliente);
-        clienteCRUDService.getListaClienteTabla().add(cliente);
-        
+        clienteCRUDService.listaClienteTablaProperty().getValue().add(cliente);
+        mensajeExitoso();
+        limpiarCampos();
     }
 
     private void editar() {
         obtenerCampos();
         setCliente(cliente);
         Conexion.getInstance().merge(cliente);
-        ObservableList<Cliente> clientes = clienteCRUDService.getListaClienteTabla();
-        int indexCliente = clientes.indexOf(clientes);
+        ObservableList<Cliente> clientes = clienteCRUDService.listaClienteTablaProperty().getValue();
+        int indexCliente = clientes.indexOf(cliente);
         clientes.set(indexCliente, cliente);
+        clienteCRUDService.setListaClienteTabla(clientes);
+        mensajeExitoso();
     }
     
     
@@ -162,5 +176,20 @@ public class CamposClientePresenter implements Initializable {
         cliente.setNombre(nombre);
         cliente.setDir(dir);
         cliente.setTel(tel);
+    }
+    
+    private void mensajeExitoso(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exito");
+        alert.setHeaderText("Registro exitoso");
+        alert.setContentText("Se ha guardado el cliente");
+        alert.showAndWait();
+    }
+    
+    private void limpiarCampos(){
+        txtDNI.setText("");
+        txtNombre.setText("");
+        txtDir.setText("");
+        txtTel.setText("");
     }
 }

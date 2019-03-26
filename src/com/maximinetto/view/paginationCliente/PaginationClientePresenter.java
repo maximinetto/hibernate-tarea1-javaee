@@ -71,7 +71,7 @@ public class PaginationClientePresenter implements Initializable {
         ObservableList<Cliente> listaClientePaginada = this.clienteCRUDService.mostrarPaginado(ITEMS_PER_PAGE, fromIndex);
         tblClientes.setItems(listaClientePaginada);
         double paginas = clienteCRUDService.getTotalClientes().doubleValue() / ITEMS_PER_PAGE;
-        int totalPages = (int) Math.ceil(paginas);
+        int totalPages = paginas != 0 ? (int) Math.ceil(paginas) : 1;
         paginatorCliente.setPageCount(totalPages);
         return tablaClientesViewParent;
     }
