@@ -20,7 +20,7 @@ public class DetalleReserva implements Serializable{
     @ManyToOne()
     private Reserva reserva;
 
-    private String precio;
+    private double precio;
     
     @ManyToOne()
     private Automovil automovil; 
@@ -48,11 +48,11 @@ public class DetalleReserva implements Serializable{
         this.reserva = reserva;
     }
 
-    public String getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

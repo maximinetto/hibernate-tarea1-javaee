@@ -27,6 +27,7 @@ public class Cliente implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCliente;
 
+   
     @Column(unique = true, nullable = false)
     @Transient
     private final StringProperty dni = new SimpleStringProperty();
@@ -53,7 +54,7 @@ public class Cliente implements Serializable{
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
-    
+   
     @Access(AccessType.PROPERTY)
     public String getDni() {
             return dni.get();
@@ -113,5 +114,12 @@ public class Cliente implements Serializable{
     public void setReservas(List<Reserva> reservas) {
             this.reservas = reservas;
     }
+
+    @Override
+    public String toString() {
+        return getDni() + " " + getNombre();
+    }
+    
+    
 	
 }

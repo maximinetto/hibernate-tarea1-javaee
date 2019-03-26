@@ -4,6 +4,7 @@ import com.airhacks.afterburner.injection.Injector;
 import com.maximinetto.connection.Conexion;
 import com.maximinetto.entities.Cliente;
 import com.maximinetto.view.clientemostrar.ClienteMostrarView;
+import com.maximinetto.view.reserva.ReservaView;
 import com.maximinetto.view.tablaClientes.TablaClientesView;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -18,9 +19,9 @@ public class Tarea1 extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        Scene scene = new Scene(getClienteMostrar());
+        Scene scene = new Scene(getReservaMostrar());
         
-        stage.setTitle("Clientes");
+        stage.setTitle("Reserva");
         
         
         stage.setScene(scene);
@@ -32,6 +33,12 @@ public class Tarea1 extends Application {
        return clienteMostrarView.getView();
         
    }
+   
+   private Parent getReservaMostrar(){
+       ReservaView reservaView = new ReservaView();
+       return reservaView.getView();
+   }
+   
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
